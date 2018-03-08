@@ -88,13 +88,13 @@ int cidades_peek(const char *nomef, const char *nomecidade, cidade *resultado)
 
 		for (position=0; position < vetor_tamanho(v); position++)
 		{
-			if(strcmp(nomecidade, v->elementos[position].nome)==0)
+			if(strcmp(nomecidade, v->elementos[position].nome)==0) //se elemento pretendido é igual ao encontrado no vetor
 			{
-				resultado[i] = v->elementos[position];
-				return position;
+				resultado[i] = v->elementos[position]; //guarda conteúdo do elemento em resultado e retorna resultado
+				return position; //retorna posicao do elemento encontrado
 			}
 		}
-		
+
 		fclose(f);
 		return -1;
 
