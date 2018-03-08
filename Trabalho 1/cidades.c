@@ -9,6 +9,14 @@
 #include <stdio.h>
 #include <string.h>
 
+
+/**
+ * coloca num vetor inicialmente vazio a informacao contida em ficheiro binario
+ * parametro: nomef nome do ficheiro
+ * retorno: apontador para o vetor criado
+ * nota: se existe erro na leitura do ficheiro ou vetor nao foi criado retorna NULL
+ */
+
 vetor* cidades_load(const char *nomef)
 {
 		FILE *f;
@@ -35,6 +43,14 @@ vetor* cidades_load(const char *nomef)
 		return cidades;
 
 }
+
+
+/**
+ * coloca num ficheiro binario inicialmente vazio a informacao contida no vetor
+ * parametro: nomef nome do ficheiro
+ * parametro: vec apontador para o vetor
+ * retorno: -1 se aconteceu algum erro ou numero de elementos guardados no ficheiro
+ */
 
 int cidades_save(const vetor *vec, const char *nomef)
 {
@@ -73,7 +89,6 @@ int cidades_save(const vetor *vec, const char *nomef)
 int cidades_peek(const char *nomef, const char *nomecidade, cidade *resultado)
 {
 		FILE *f;
-		cidade c;
 		int position = 0, i=0;
 
 		f = fopen (nomef, "rb");
@@ -88,11 +103,13 @@ int cidades_peek(const char *nomef, const char *nomecidade, cidade *resultado)
 
 		for (position=0; position < vetor_tamanho(v); position++)
 		{
-			if(strcmp(nomecidade, v->elementos[position].nome)==0) //se elemento pretendido é igual ao encontrado no vetor
+			if(strcmp(nomecidade, v->elementos[position].nome)==0)
 			{
-				resultado[i] = v->elementos[position]; //guarda conteúdo do elemento em resultado e retorna resultado
-				return position; //retorna posicao do elemento encontrado
+				resultado[i] = v->elementos[position];
+
+				return position;
 			}
+
 		}
 
 		fclose(f);
@@ -113,7 +130,7 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 {
 	FILE *f;
 	cidade c;
-	int cont;
+	int cont, i, position, j;
 	f = fopen(nomef, "rb+");
 
 	   if(f == NULL)
@@ -122,32 +139,55 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 		   return -1;
 	     }
 
+	 vetor *v = cidades_load(nomef); //carrega num vetor o ficheiro
 
-	   while(fread(&c, sizeof(cidade), 1, f) == 1)
-	     {
-		   	if(strcmp(nomecidade, c.nome) == 0)
-	          {
-	              // printf("%s\n", nomecidade);
-	               break;
+	 i = cidades_peek(nomef,nomecidade,&c); //atribui a i a posiçao da cidade
 
-	          }
-		   	cont += sizeof(cidade);
-	     }
+	 v->elementos[i]=nova; //elementos i passa a ser a cidade nova
 
+	 //Testes
 
+	 //printf("%s\n", nova.nome);
+	 //printf("%s\n", nova.pais);
+	 //printf("%d\n", nova.populacao);
+	 //printf("%d\n", nova.area);
 
-	        fseek(f, cont, SEEK_SET);
-	        fwrite(&nova ,sizeof(cidade), 1, f);
-	        fclose(f);
-	        printf("%d\n", cont);
-	        return cont;
+	 //fwrite(&c, sizeof(cidade),1, f);
+	 //printf("%d\n", i);
+
+	 j = cidades_save(v,nomef); //guarda no ficheiro os vetores actualizados
+
+	 fclose(f);
+
+	 return i; //retorna a posicao
 
 }
+
+/**
+*  reordena o vetor de cidades crescentemente, de acordo com criterio especificado
+*  parametro: vec apontador para vetor
+*  parametro: criterio carater que indica o criterio de ordenacao
+*             se 'p', ordena por pais e, em caso de empate, por populacao ;
+*             se 'a', ordena por area e, em caso de empate, por populacao
+*  retorno: -1 se ocorrer um erro ou 0 se for bem sucedido
+*/
 
 int cidades_resort(vetor *vec, char criterio)
 {
   return -1;
 }
+
+
+/**
+procura as cidades similares em populacao a uma cidade especificada
+ * parametro: vec apontador para o vetor de cidades
+*  parametro: nomecidade nome da cidade referencia
+*  parametro: deltapop diferenca maxima (valor absoluto) em populacao relativamente 'a populacao da cidade referencia
+*  parametro: nsimilares numero de resultados encontrados (por referencia)
+*  retorno: vetor(array) de strings com o nome das cidades encontradas
+*           as cidades retornadas mantem a ordem em que estavam guardadas no vetor original
+*  nota: se cidade referencia nao existe ou nao encontra cidades similares, retorna NULL
+*/
 
 char** cidades_similar (vetor *vec, const char *nomecidade, int deltapop, int *nsimilares)
 {
