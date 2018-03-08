@@ -174,7 +174,40 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 
 int cidades_resort(vetor *vec, char criterio)
 {
-  return -1;
+  int i, count, l, r=0;
+	//int j;
+	//cidade c;
+	//char h;
+
+	i=vec->tamanho-1;
+
+	//i=vec->tamanho;
+
+	//j=vec->elementos[1192].area;
+
+	//c=vec->elementos[1192];
+
+	//r=vec->elementos[l+1].area;
+
+	if (criterio == 'a')
+	{
+	for (l=0; l <= i; l++)
+			{
+				while (vec->elementos[l].area > vec->elementos[l+1].area)
+
+						(vec->elementos[l+1] = vec->elementos[l]);
+
+			}
+	return 0;
+	}
+
+
+	//printf("%d\n", i);
+	//printf("%d\n", j);
+	//printf("%s\n", c.pais);
+
+return 0;
+
 }
 
 
