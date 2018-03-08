@@ -62,11 +62,19 @@ int cidades_save(const vetor *vec, const char *nomef)
 
 }
 
+/**
+*  pesquisa um elemento (cidade) diretamente no ficheiro
+*  parametro: nomef nome do ficheiro
+*  parametro: nomecidade nome da cidade a pesquisar
+*  parametro: resultado cidade encontrada (por referencia)
+*  retorno: posicao do elemento encontrado no ficheiro ou -1 se ocorrer algum erro ou nao encontrar elemento
+*/
+
 int cidades_peek(const char *nomef, const char *nomecidade, cidade *resultado)
 {
 		FILE *f;
 		cidade c;
-		int position = 0;
+		int position = 0, i=0;
 
 		f = fopen (nomef, "rb");
 
@@ -76,16 +84,18 @@ int cidades_peek(const char *nomef, const char *nomecidade, cidade *resultado)
 			return -1;
 		}
 
-		while (fread(&c, sizeof(cidade),1, f) == 1)
+		 vetor *v = cidades_load(nomef);
+
+		for (position=0; position < vetor_tamanho(v); position++)
 		{
-			if(strcmp(nomecidade, c.nome) == 0)
+			if(strcmp(nomecidade, v->elementos[position].nome)==0)
+			{
+				resultado[i] = v->elementos[position];
 				return position;
-
-			position++;
+			}
 		}
-
+		
 		fclose(f);
-
 		return -1;
 
 }
@@ -103,7 +113,7 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 {
 	FILE *f;
 	cidade c;
-	int cont = 0;
+	int cont;
 	f = fopen(nomef, "rb+");
 
 	   if(f == NULL)
@@ -121,13 +131,15 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 	               break;
 
 	          }
+		   	cont += sizeof(cidade);
+	     }
 
-	            cont += sizeof(cidade);
-	      }
+
 
 	        fseek(f, cont, SEEK_SET);
 	        fwrite(&nova ,sizeof(cidade), 1, f);
 	        fclose(f);
+	        printf("%d\n", cont);
 	        return cont;
 
 }
