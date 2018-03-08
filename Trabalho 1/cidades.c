@@ -72,7 +72,7 @@ int cidades_save(const vetor *vec, const char *nomef)
 			fwrite(&vec->elementos[i], sizeof(cidade),1, f);
 		}
 
-		close(f);
+		fclose(f);
 
 		return i;
 
