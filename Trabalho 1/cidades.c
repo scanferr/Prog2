@@ -201,7 +201,6 @@ int cidades_resort(vetor *vec, char criterio)
 					{
 						//Swap the numbers
 						temp = vec->elementos[j]; // Temporary variable to hold the current number
-
 						vec->elementos[j] = vec->elementos[j+1]; // Replace current number with adjacent number
 	        			vec->elementos[j + 1] = temp; // Replace adjacent number with current number
 	        			//printf("%d\n", temp);
@@ -209,6 +208,22 @@ int cidades_resort(vetor *vec, char criterio)
 				}
 			}
 		}
+
+		if (criterio == 'p')
+			{
+				for (i = 0; i < (n - 1); i++)
+				{
+					for (j = 0; j < (n - i - 1); j++)
+					{
+						if ((strcmp(vec->elementos[j].pais, vec->elementos[j + 1].pais) > 0) || (strcmp(vec->elementos[j].pais, vec->elementos[j + 1].pais) == 0 && vec->elementos[j].populacao > vec->elementos[j+1].populacao))
+						{
+							temp = vec->elementos[j];
+							vec->elementos[j] = vec->elementos[j + 1];
+							vec->elementos[j + 1] = temp;
+						}
+					}
+				}
+			}
 
 		return 0;
 }
