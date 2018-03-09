@@ -185,47 +185,32 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 
 int cidades_resort(vetor *vec, char criterio)
 {
-	int i, count, l, r=0, j, temp;
+		int i;
+		int j;
+		cidade temp;
+		int n = vec->tamanho;
 
-
-
-	int n = vec->tamanho;
-
-	//int j;
-	//cidade c;
-	//char h;
-	//i=vec->tamanho;
-	//j=vec->elementos[1192].area;
-	//c=vec->elementos[1192];
-	//r=vec->elementos[l+1].area;
-
-	if (criterio == 'a')
-	{
-
-		for (i = 0; i < (n-1); i++)
+		if (criterio == 'a')
 		{
-		  for (j = 0; j < (n-i-1); j++)
-		  {
-		   if ((vec->elementos[j].area) > (vec->elementos[j+1].area))
-		   {
-		    temp = (vec->elementos[j].area);
-		    (vec->elementos[j].area) = (vec->elementos[j+1].area);
-		    (vec->elementos[j+1].area) = temp;
+			for (i = 0; i < (n - 1); i++)
+			{
+				for (j = 0; j < (n - i - 1); j++)
+				{
+					//Compare the adjacent positions
+					if ((vec->elementos[j].area > vec->elementos[j + 1].area || (vec->elementos[j].area==vec->elementos[j+1].area && vec->elementos[j].populacao > vec->elementos[j+1].populacao)))
+					{
+						//Swap the numbers
+						temp = vec->elementos[j]; // Temporary variable to hold the current number
 
-		   }
-		  }
+						vec->elementos[j] = vec->elementos[j+1]; // Replace current number with adjacent number
+	        			vec->elementos[j + 1] = temp; // Replace adjacent number with current number
+	        			//printf("%d\n", temp);
+					}
+				}
+			}
 		}
-	}
 
-
-
-	l=vec->elementos[1000].area;
-
-	//printf("%d\n", n);
-	printf("%d\n", l);
-	//printf("%s\n", c.pais);
-
-return 0;
+		return 0;
 }
 
 
