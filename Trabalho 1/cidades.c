@@ -10,6 +10,16 @@
 #include <string.h>
 
 
+void swap(int *l, int *r)
+{
+    int temp = *l;
+    *l = *r;
+    *r = temp;
+}
+
+
+
+
 /**
  * coloca num vetor inicialmente vazio a informacao contida em ficheiro binario
  * parametro: nomef nome do ficheiro
@@ -56,7 +66,6 @@ int cidades_save(const vetor *vec, const char *nomef)
 {
 
 		FILE *f;
-		vetor *cidades;
 		int i;
 
 		f = fopen (nomef, "wb");
@@ -130,7 +139,9 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 {
 	FILE *f;
 	cidade c;
+
 	int cont, i, position, j;
+
 	f = fopen(nomef, "rb+");
 
 	   if(f == NULL)
@@ -174,40 +185,47 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 
 int cidades_resort(vetor *vec, char criterio)
 {
-  int i, count, l, r=0;
+	int i, count, l, r=0, j, temp;
+
+
+
+	int n = vec->tamanho;
+
 	//int j;
 	//cidade c;
 	//char h;
-
-	i=vec->tamanho-1;
-
 	//i=vec->tamanho;
-
 	//j=vec->elementos[1192].area;
-
 	//c=vec->elementos[1192];
-
 	//r=vec->elementos[l+1].area;
 
 	if (criterio == 'a')
 	{
-	for (l=0; l <= i; l++)
-			{
-				while (vec->elementos[l].area > vec->elementos[l+1].area)
 
-						(vec->elementos[l+1] = vec->elementos[l]);
+		for (i = 0; i < (n-1); i++)
+		{
+		  for (j = 0; j < (n-i-1); j++)
+		  {
+		   if ((vec->elementos[j].area) > (vec->elementos[j+1].area))
+		   {
+		    temp = (vec->elementos[j].area);
+		    (vec->elementos[j].area) = (vec->elementos[j+1].area);
+		    (vec->elementos[j+1].area) = temp;
 
-			}
-	return 0;
+		   }
+		  }
+		}
 	}
 
 
-	//printf("%d\n", i);
-	//printf("%d\n", j);
+
+	l=vec->elementos[1000].area;
+
+	//printf("%d\n", n);
+	printf("%d\n", l);
 	//printf("%s\n", c.pais);
 
 return 0;
-
 }
 
 
