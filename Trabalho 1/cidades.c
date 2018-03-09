@@ -10,16 +10,6 @@
 #include <string.h>
 
 
-void swap(int *l, int *r)
-{
-    int temp = *l;
-    *l = *r;
-    *r = temp;
-}
-
-
-
-
 /**
  * coloca num vetor inicialmente vazio a informacao contida em ficheiro binario
  * parametro: nomef nome do ficheiro
@@ -140,7 +130,7 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 	FILE *f;
 	cidade c;
 
-	int cont, i, position, j;
+	int i, position, j;
 
 	f = fopen(nomef, "rb+");
 
@@ -242,5 +232,53 @@ procura as cidades similares em populacao a uma cidade especificada
 
 char** cidades_similar (vetor *vec, const char *nomecidade, int deltapop, int *nsimilares)
 {
-  return NULL;
+	int i, pop, j, l, pos;
+
+	//tamanho maximo do vetor com as cidades iguais
+	int totalstrings=100;
+
+	//cria o vetor auxiliar com as cidades iguais
+	char **igual = (char**)malloc(sizeof(char*)*totalstrings);
+
+	//aloca espaço para cada string, dentro do vetor
+	for(i=0; i<totalstrings; i++)
+	{
+		igual[i]= (char*)malloc(sizeof(char)*totalstrings);
+	}
+
+	//percorre os nomes das cidades todos e quando encontra a cidade a pesquisar, guarda a sua populacao e a posicao onde esta
+	for (i=0; i<vec->tamanho; i++)
+	{
+		if(strcmp(vec->elementos[i].nome, nomecidade)==0)
+		{
+		pop = vec->elementos[i].populacao;
+		pos = i;
+
+		}
+	}
+
+	//compara as populacoes das cidades todas e ve se esta entre o intervalo -delta e + delta, rejeitando a cidade a pesquisar (na posicao pos)
+	for (i=0; i<vec->tamanho; i++)
+	{
+		if(vec->elementos[i].populacao <= pop + deltapop && vec->elementos[i].populacao >= pop - deltapop && i != pos)
+		{
+			//copia o valor das cidades com populacao dentro da gama para o vetor criado anteriormente
+
+			strcpy(igual[l], vec->elementos[i].nome);
+
+			//a funcao tem como atributo o numero de cidades encontrada, tem que contar
+			l++;
+		}
+	}
+//retorna o numero de cidades dentro da gama
+
+	*nsimilares=l;
+
+//TESTES
+	//j=vec->elementos[1192].populacao;
+	//printf("%d\n", pop);
+	//printf("Pop do Porto e %d\n", j);
+
+//imprime o vetor com as cidades
+  return igual;
 }
