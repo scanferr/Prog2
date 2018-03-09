@@ -233,10 +233,8 @@ procura as cidades similares em populacao a uma cidade especificada
 char** cidades_similar (vetor *vec, const char *nomecidade, int deltapop, int *nsimilares)
 {
 	int i, pop, j, l, pos;
-
-	//tamanho maximo do vetor com as cidades iguais
-	int totalstrings=100;
-
+	//tamanho maximo do vetor com as cidades iguais. Como nao sabemos quantas cidades podem ser, aloca-se vetor para 1173 elementos(maximo)
+	int totalstrings=1173;
 	//cria o vetor auxiliar com as cidades iguais
 	char **igual = (char**)malloc(sizeof(char*)*totalstrings);
 
@@ -257,28 +255,29 @@ char** cidades_similar (vetor *vec, const char *nomecidade, int deltapop, int *n
 		}
 	}
 
-	//compara as populacoes das cidades todas e ve se esta entre o intervalo -delta e + delta, rejeitando a cidade a pesquisar (na posicao pos)
+	//compara as populacoes das cidades todas e ve se estao entre o intervalo -delta e + delta, rejeitando a cidade a pesquisar (na posicao pos)
 	for (i=0; i<vec->tamanho; i++)
 	{
 		if(vec->elementos[i].populacao <= pop + deltapop && vec->elementos[i].populacao >= pop - deltapop && i != pos)
 		{
 			//copia o valor das cidades com populacao dentro da gama para o vetor criado anteriormente
-
 			strcpy(igual[l], vec->elementos[i].nome);
-
 			//a funcao tem como atributo o numero de cidades encontrada, tem que contar
 			l++;
 		}
 	}
-//retorna o numero de cidades dentro da gama
+
+	//retorna o numero de cidades dentro da gama (atributo da funcao)
 
 	*nsimilares=l;
 
-//TESTES
+	//TESTES
 	//j=vec->elementos[1192].populacao;
 	//printf("%d\n", pop);
 	//printf("Pop do Porto e %d\n", j);
 
-//imprime o vetor com as cidades
-  return igual;
+	//imprime o vetor com as cidades
+	return igual;
+	//limpa a memoria do vetor criado, dado que criamos vetor para 1173 elementos
+	free(igual);
 }
