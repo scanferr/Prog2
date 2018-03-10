@@ -10,17 +10,20 @@
 #include <string.h>
 
 
-//FUNCAO AUXILIAR PARA FUNCAO RESORT
-void swap(const vetor *vec, cidade temp, int j)
+/**
+ * troca a posicao de duas cidades
+ * parametro: first_city apontador para primeira cidade
+ * parametro: second_city apontador para segunda cidade
+ * retorno: sem retorno (void)
+ * nota: funcao auxiliar
+ */
+
+void city_swap(cidade *first_city, cidade *second_city)
 {
 
-//Guarda valor atual
-temp = vec->elementos[j];
-//Substitui valor atual pelo seguinte
-vec->elementos[j] = vec->elementos[j + 1];
-//Substitui valor seguinte pelo atual
-vec->elementos[j + 1] = temp;
-
+	cidade temporary_city = *first_city;
+    *first_city = *second_city;
+    *second_city = temporary_city;
 }
 
 /**
@@ -171,7 +174,6 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 */
 int cidades_resort(vetor *vec, char criterio)
 {
-	cidade temp;
 	int i;
 	int j;
 	int array_size = vec->tamanho;
@@ -186,7 +188,7 @@ int cidades_resort(vetor *vec, char criterio)
 
 				if ((vec->elementos[j].area > vec->elementos[j + 1].area || (vec->elementos[j].area==vec->elementos[j + 1].area && vec->elementos[j].populacao > vec->elementos[j + 1].populacao)))
 				{
-					swap(vec,temp,j);
+					city_swap(&vec->elementos[j], &vec->elementos[j + 1]);
 				}
 			}
 		}
@@ -203,7 +205,7 @@ int cidades_resort(vetor *vec, char criterio)
 
 				if ((strcmp(vec->elementos[j].pais, vec->elementos[j + 1].pais) > 0) || (strcmp(vec->elementos[j].pais, vec->elementos[j + 1].pais) == 0 && vec->elementos[j].populacao > vec->elementos[j + 1].populacao))
 				{
-					swap(vec,temp,j);
+					city_swap(&vec->elementos[j], &vec->elementos[j + 1]);
 				}
 			}
 		}
