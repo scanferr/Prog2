@@ -17,13 +17,42 @@
  * retorno: sem retorno (void)
  * nota: funcao auxiliar
  */
-
-void city_swap(cidade *first_city, cidade *second_city)
+void city_swap(cidade *first, cidade *second)
 {
 
-	cidade temporary_city = *first_city;
-    *first_city = *second_city;
-    *second_city = temporary_city;
+    cidade temporary_city = *first;
+    *first = *second;
+    *second = temporary_city;
+}
+
+/**
+ * ordena por area e em caso de empate por populacao
+ * parametro: first_city apontador para primeira cidade
+ * parametro: second_city apontador para segunda cidade
+ * retorno: sem retorno (void)
+ * nota: funcao auxiliar
+ */
+void sort_area(cidade *first_city, cidade *second_city)
+{
+    if ((first_city->area > second_city->area) || (first_city->area == second_city->area && first_city->populacao > second_city->populacao))
+    {
+        city_swap(first_city, second_city);
+    }
+}
+
+/**
+ * ordena por pais e em caso de empate por populacao
+ * parametro: first_city apontador para primeira cidade
+ * parametro: second_city apontador para segunda cidade
+ * retorno: sem retorno (void)
+ * nota: funcao auxiliar
+ */
+void sort_country(cidade *first_city, cidade *second_city)
+{
+    if ((strcmp(first_city->pais, second_city->pais) > 0) || (strcmp(first_city->pais, second_city->pais) == 0 && first_city->populacao > second_city->populacao))
+    {
+        city_swap(first_city, second_city);
+    }
 }
 
 /**
@@ -32,7 +61,6 @@ void city_swap(cidade *first_city, cidade *second_city)
  * retorno: apontador para o vetor criado
  * nota: se existe erro na leitura do ficheiro ou vetor nao foi criado retorna NULL
  */
-
 vetor* cidades_load(const char *nomef)
 {
     FILE *file;
@@ -65,30 +93,26 @@ vetor* cidades_load(const char *nomef)
  * parametro: vec apontador para o vetor
  * retorno: -1 se aconteceu algum erro ou numero de elementos guardados no ficheiro
  */
-
 int cidades_save(const vetor *vec, const char *nomef)
 {
-    FILE *file;
-    int i;
-    int array_size;
+	FILE *file;
+	int i;
 
-    file = fopen (nomef, "wb");
+	file = fopen (nomef, "wb");
 
-    if (file == NULL)
-    {
-        printf("Impossível abrir o ficheiro!\n");
-        return -1;
-    }
+	if (file == NULL)
+	{
+	        printf("Impossível abrir o ficheiro!\n");
+	        return -1;
+	}
 
-    array_size = vetor_tamanho(vec);
+	for (i = 0; i < vetor_tamanho(vec); i++)
+	{
+	        fwrite(&vec->elementos[i], sizeof(cidade), 1, file);
+	}
 
-    for (i = 0; i < array_size; i++)
-    {
-        fwrite(&vec->elementos[i], sizeof(cidade), 1, file);
-    }
-
-    fclose(file);
-    return i;
+	fclose(file);
+	return i;
 }
 
 /**
@@ -98,39 +122,33 @@ int cidades_save(const vetor *vec, const char *nomef)
 *  parametro: resultado cidade encontrada (por referencia)
 *  retorno: posicao do elemento encontrado no ficheiro ou -1 se ocorrer algum erro ou nao encontrar elemento
 */
-
 int cidades_peek(const char *nomef, const char *nomecidade, cidade *resultado)
 {
-    FILE *file;
-    int i;
-    int array_size;
+	FILE *file;
+	int i;
 
-    file = fopen (nomef, "rb");
+	file = fopen (nomef, "rb");
 
-    if(file == NULL)
-    {
-        printf("Impossível abrir o ficheiro!\n");
-        return -1;
-    }
+	if(file == NULL)
+	{
+	        printf("Impossível abrir o ficheiro!\n");
+	        return -1;
+	}
 
-    vetor *cities_array = cidades_load(nomef);
+	vetor *cities_array = cidades_load(nomef);
 
-    array_size = vetor_tamanho(cities_array);
+	for (i = 0; i < vetor_tamanho(cities_array); i++)
+	{
+	        if (strcmp(nomecidade, cities_array->elementos[i].nome) == 0)
+	        {
+	            resultado[0] = cities_array->elementos[i];
+	            fclose(file);
+	            return i;
+	        }
+	}
 
-    for (i = 0; i < array_size; i++)
-    {
-        if (strcmp(nomecidade, cities_array->elementos[i].nome) == 0)
-        {
-        	//printf("Resultado antes e: %s %s %d %d\n", resultado->nome, resultado->pais, resultado->populacao, resultado->area);
-        	resultado[0] = cities_array->elementos[i];
-            //printf("Resultado depois e: %s %s %d %d\n", resultado->nome, resultado->pais, resultado->populacao, resultado->area);
-            fclose(file);
-            return i;
-        }
-    }
-
-    fclose(file);
-    return -1;
+	fclose(file);
+	return -1;
 }
 
 /**
@@ -140,7 +158,6 @@ int cidades_peek(const char *nomef, const char *nomecidade, cidade *resultado)
 *  parametro: novo elemento (cidade) a substituir a cidade original
 *  retorno: posicao do elemento alterado no ficheiro ou -1 se ocorrer algum erro ou nao encontrar elemento
 */
-
 int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 {
     FILE *file;
@@ -174,44 +191,34 @@ int cidades_poke(const char *nomef, const char *nomecidade, cidade nova)
 */
 int cidades_resort(vetor *vec, char criterio)
 {
-	int i;
-	int j;
-	int array_size = vec->tamanho;
+    int i;
+    int j;
+    int array_size = vetor_tamanho(vec);
 
-	if (criterio == 'a')
-	{
-		for (i = 0; i < (array_size - 1); i++)
-		{
-			for (j = 0; j < (array_size - i - 1); j++)
-			{
-				//Comparar areas
+    switch(criterio)
+    {
+    	case 'a':
+                for (i = 0; i < (array_size - 1); i++)
+                {
+                    for (j = 0; j < (array_size - i - 1); j++)
+                    {
+                        sort_area(&vec->elementos[j], &vec->elementos[j + 1]);
+                    }
+                }
+                return 0;
 
-				if ((vec->elementos[j].area > vec->elementos[j + 1].area || (vec->elementos[j].area==vec->elementos[j + 1].area && vec->elementos[j].populacao > vec->elementos[j + 1].populacao)))
-				{
-					city_swap(&vec->elementos[j], &vec->elementos[j + 1]);
-				}
-			}
-		}
-		return 0;
-	}
+        case 'p':
+        		for (i = 0; i < (array_size - 1); i++)
+        	    {
+        	        for (j = 0; j < (array_size - i - 1); j++)
+        	        {
+        	            sort_country(&vec->elementos[j], &vec->elementos[j + 1]);
+        	        }
+        	    }
+        	    return 0;
+    }
 
-	if (criterio == 'p')
-	{
-		for (i = 0; i < (array_size - 1); i++)
-		{
-			for (j = 0; j < (array_size - i - 1); j++)
-			{
-				//Comparar paises
-
-				if ((strcmp(vec->elementos[j].pais, vec->elementos[j + 1].pais) > 0) || (strcmp(vec->elementos[j].pais, vec->elementos[j + 1].pais) == 0 && vec->elementos[j].populacao > vec->elementos[j + 1].populacao))
-				{
-					city_swap(&vec->elementos[j], &vec->elementos[j + 1]);
-				}
-			}
-		}
-		return 0;
-	}
-	return -1;
+    return -1;
 }
 
 /**
@@ -224,52 +231,51 @@ procura as cidades similares em populacao a uma cidade especificada
 *           as cidades retornadas mantem a ordem em que estavam guardadas no vetor original
 *  nota: se cidade referencia nao existe ou nao encontra cidades similares, retorna NULL
 */
-
 char** cidades_similar (vetor *vec, const char *nomecidade, int deltapop, int *nsimilares)
 {
 	int i;
-	int cidade_populacao;
-	int cidade_posicao;
-	int num_cidades_similares = 0;
-	// tamanho maximo do vetor com as cidades iguais. Como nao sabemos quantas cidades podem ser, aloca-se vetor para 1173 elementos(maximo)
-	int total_cidades = 1173;
+	int pop_city;
+	int pos_city;
+	int similar_city = 0;
+
+	// tamanho maximo do vetor com as cidades iguais. Como nao sabemos quantas cidades podem ser, aloca-se vetor para tamanho do vetor
+	int total = vetor_tamanho(vec);
+
 	// cria o vetor auxiliar com as cidades iguais
-	char **cidades_similares = (char**)malloc(sizeof(char*) * total_cidades);
+	char **similar_array = (char**)malloc(sizeof(char*) * total);
 
 	//aloca espaço para cada string, dentro do vetor
-	for (i = 0; i < total_cidades; i++)
+	for (i = 0; i < total; i++)
 	{
-		cidades_similares[i] = (char*)malloc(sizeof(char) * total_cidades);
+		similar_array[i] = (char*)malloc(sizeof(char) * total);
 	}
 
 	//percorre os nomes das cidades todos e quando encontra a cidade a pesquisar, guarda a sua populacao e a posicao onde esta
-	for (i = 0; i < vec->tamanho; i++)
+	for (i = 0; i < total; i++)
 	{
 		if (strcmp(vec->elementos[i].nome, nomecidade) == 0)
 		{
-			cidade_populacao = vec->elementos[i].populacao;
-			cidade_posicao = i;
+			pop_city = vec->elementos[i].populacao;
+			pos_city = i;
 		}
 	}
 
 	//compara as populacoes das cidades todas e ve se estao entre o intervalo -delta e +delta, rejeitando a cidade a pesquisar (na posicao pos)
-	for (i = 0; i < vec->tamanho; i++)
+	for (i = 0; i < total; i++)
 	{
-		if (vec->elementos[i].populacao <= cidade_populacao + deltapop && vec->elementos[i].populacao >= cidade_populacao - deltapop && i != cidade_posicao)
+		if (vec->elementos[i].populacao <= pop_city + deltapop && vec->elementos[i].populacao >= pop_city - deltapop && i != pos_city)
 		{
 			//copia o valor das cidades com populacao dentro da gama para o vetor criado anteriormente
-			strcpy(cidades_similares[num_cidades_similares], vec->elementos[i].nome);
+			strcpy(similar_array[similar_city], vec->elementos[i].nome);
 			//a funcao tem como atributo o numero de cidades encontrada, tem que contar
-			num_cidades_similares++;
+			similar_city++;
 		}
 	}
 
 	//retorna o numero de cidades dentro da gama (atributo da funcao)
-	*nsimilares = num_cidades_similares;
+	*nsimilares = similar_city;
 
-	return cidades_similares;
+	return similar_array;
 
-	//limpa a memoria do vetor criado, dado que criamos vetor para 1173 elementos
-	free(cidades_similares);
 }
 
