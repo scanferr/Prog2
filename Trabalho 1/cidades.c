@@ -12,14 +12,13 @@
 
 /**
  * troca a posicao de duas cidades
- * parametro: first_city apontador para primeira cidade
- * parametro: second_city apontador para segunda cidade
+ * parametro: first apontador para primeira cidade
+ * parametro: second apontador para segunda cidade
  * retorno: sem retorno (void)
  * nota: funcao auxiliar
  */
 void city_swap(cidade *first, cidade *second)
 {
-
     cidade temporary_city = *first;
     *first = *second;
     *second = temporary_city;
@@ -238,20 +237,17 @@ char** cidades_similar (vetor *vec, const char *nomecidade, int deltapop, int *n
 	int pos_city;
 	int similar_city = 0;
 
-	// tamanho maximo do vetor com as cidades iguais. Como nao sabemos quantas cidades podem ser, aloca-se vetor para tamanho do vetor
-	int total = vetor_tamanho(vec);
+	int array_size = vetor_tamanho(vec);
 
-	// cria o vetor auxiliar com as cidades iguais
-	char **similar_array = (char**)malloc(sizeof(char*) * total);
+	char **similar_array = (char**)malloc(sizeof(char*) * array_size);
 
-	//aloca espaço para cada string, dentro do vetor
-	for (i = 0; i < total; i++)
+	
+	for (i = 0; i < array_size; i++)
 	{
-		similar_array[i] = (char*)malloc(sizeof(char) * total);
+		similar_array[i] = (char*)malloc(sizeof(char) * array_size);
 	}
-
-	//percorre os nomes das cidades todos e quando encontra a cidade a pesquisar, guarda a sua populacao e a posicao onde esta
-	for (i = 0; i < total; i++)
+	
+	for (i = 0; i < array_size; i++)
 	{
 		if (strcmp(vec->elementos[i].nome, nomecidade) == 0)
 		{
@@ -260,22 +256,15 @@ char** cidades_similar (vetor *vec, const char *nomecidade, int deltapop, int *n
 		}
 	}
 
-	//compara as populacoes das cidades todas e ve se estao entre o intervalo -delta e +delta, rejeitando a cidade a pesquisar (na posicao pos)
-	for (i = 0; i < total; i++)
+	for (i = 0; i < array_size; i++)
 	{
 		if (vec->elementos[i].populacao <= pop_city + deltapop && vec->elementos[i].populacao >= pop_city - deltapop && i != pos_city)
 		{
-			//copia o valor das cidades com populacao dentro da gama para o vetor criado anteriormente
 			strcpy(similar_array[similar_city], vec->elementos[i].nome);
-			//a funcao tem como atributo o numero de cidades encontrada, tem que contar
 			similar_city++;
 		}
 	}
-
-	//retorna o numero de cidades dentro da gama (atributo da funcao)
 	*nsimilares = similar_city;
-
 	return similar_array;
-
 }
 
