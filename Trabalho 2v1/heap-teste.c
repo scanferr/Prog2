@@ -23,7 +23,7 @@ const char * filmes[] = {
   "Blade Runner 2049",
   "Guardians of the Galaxy Vol. 2"
 };
-  
+
 /* segunda série de testes */
 
 elemento livros[] = {
@@ -37,7 +37,7 @@ elemento livros[] = {
   {20, "A Man Called Ove"}
 };
 
-const int nlivros = sizeof(livros)/sizeof(elemento); 
+const int nlivros = sizeof(livros)/sizeof(elemento);
 
 static void  ERROR(const char *x) {
   fprintf(stderr, "ERRO: %s\n",x);
@@ -59,8 +59,8 @@ int main(void)
         ERROR("Erro ao inserir em heap.");
     }
   
-    /* mostraHeap(h, 1); */ 
-   
+    /* mostraHeap(h, 1); */
+
     printf("Numero de elementos: %d\n", h->tamanho);
 
     if ((str = heap_remove(h)) == NULL)
@@ -91,13 +91,13 @@ int main(void)
     if(h->tamanho == 5)
       puts("(OK)");
     else
-      puts("(ERRO)");      
+      puts("(ERRO)");
 
     /* mostraHeap(h, 1); */
-    
+
     for (i = 0; i < nelem - 2; i++)
       if ((str = heap_remove(h)) == NULL)
-        ERROR("HEAP devia ter elementos.");      
+        ERROR("HEAP devia ter elementos.");
       else
         free(str);
   
@@ -116,7 +116,7 @@ int main(void)
 
   if (h != NULL) {
     
-    for (i=0; i< nelem; i++) 
+    for (i=0; i< nelem; i++)
       if (heap_insere(h, filmes[i], pri_init[i]) == 0)
         break;
     
@@ -134,7 +134,7 @@ int main(void)
   }
     
   printf("** Teste com livros\n");
-  
+
   if ((h = heap_constroi(livros, nlivros)) == NULL)
     ERROR("Erro ao construir heap.");
 
@@ -149,17 +149,17 @@ int main(void)
       printf("Valor na raiz do heap OK.\n");
     else
       printf("Valor na raiz da heap errado.\n");
-  
+
     /* mostraHeap(h,1); */
-  
+
     indice = 2;
     printf("Alterar prioridade de \"%s\" para %d.\n",
       h->elementos[indice]->valor, 9);
     if (heap_altera_prioridade(h, indice, 9) == -1)
       ERROR("Erro ao alterar a prioridade.");
-  
-    /* mostraHeap(h,1); */ 
-  
+
+    /* mostraHeap(h,1); */
+
     if (!strcmp("Milk and Honey",h->elementos[5]->valor))
       printf("OK: Elemento alterado esta' na posicao certa.\n");
     else
@@ -178,7 +178,7 @@ int main(void)
       ERROR("Elemento alterado NAO esta' na posicao certa.\n");
     
     /* mostraHeap(h,1); */
-  
+
     heap_apaga(h);
   }
   return 0;
