@@ -110,11 +110,11 @@ void heap_apaga(heap *h)
 
 char* heap_remove(heap * h)
 {
-	int i, biggestSon;
+	/*int i, biggestSon;
 	elemento *aux;
 	char *root;
 
-	if ((h->tamanho==0)||h == NULL)
+	if ((h == NULL)||h->tamanho==0)
 			return NULL;
 
 	root = h->elementos[RAIZ]->valor;
@@ -126,7 +126,7 @@ char* heap_remove(heap * h)
 
 	i = RAIZ;
 
-	while(FILHO_ESQ(i) < h->tamanho)
+	while(FILHO_ESQ(i) <= h->tamanho)
 	{
 		biggestSon = FILHO_ESQ(i);
 
@@ -139,12 +139,14 @@ char* heap_remove(heap * h)
 			h->elementos[biggestSon] = h->elementos[i];
 			h->elementos[i] = aux;
 			i = biggestSon;
+
 		}
 		else
 			break;
 	}
+		return root;*/
+	return NULL;
 
-	return root;
 }
 
 
@@ -176,7 +178,38 @@ heap* heap_constroi(elemento* v, int n_elementos)
 
 int heap_altera_prioridade(heap *h, int indice, int nova_prioridade)
 {
-  return -1;
+	int i, k;
+	elemento *aux, *aux1;
+	//char *str;
+
+	//j = h->elementos[indice]->prioridade;
+
+	h->elementos[indice]->prioridade = nova_prioridade;
+
+	//=h->tamanho;
+
+	for(k=RAIZ+1; k <= h->tamanho; k++)
+		{
+			if (less_than(h->elementos[k], h->elementos[PAI(k)]))
+			{
+				aux = h->elementos[PAI(k)];
+				h->elementos[PAI(k)] = h->elementos[k];
+				h->elementos[k] = aux;
+				k = PAI(k);
+			}
+		}
+
+	if(h->elementos[FILHO_ESQ(RAIZ)]->prioridade < h->elementos[FILHO_DIR(RAIZ)]->prioridade)
+	{
+		if(h->elementos[RAIZ]->prioridade > h->elementos[FILHO_ESQ(RAIZ)]->prioridade)
+		{
+			aux1=h->elementos[RAIZ];
+			h->elementos[RAIZ] = h->elementos[FILHO_ESQ(RAIZ)];
+			h->elementos[FILHO_ESQ(RAIZ)] = aux1;
+		}
+	}
+	//mostraHeap(h,2);
+	return 1;
 }
 
 void mostraHeap(heap *h, int indice)
@@ -191,14 +224,14 @@ void mostraHeap(heap *h, int indice)
       i = i/2;
       nivel++;
     }
-    
+
     mostraHeap(h, indice*2);
-    
+
     for(i = 0; i < 3 * nivel; i++)
       printf("     ");
-    
+
     printf("%s (%d)\n",h->elementos[indice]->valor, h->elementos[indice]->prioridade);
-    
+
     mostraHeap(h, indice*2+1);
   }
 }
