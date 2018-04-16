@@ -263,7 +263,7 @@ Retorna: 1 se a prioridade for alterada com sucesso, -1 em caso de erro.
 */
 int heap_altera_prioridade(heap *h, int indice, int nova_prioridade)
 {
-	int k;
+	int x;
 	elemento *aux;
 
 	//Atribui nova_prioridade à prioridade do elemento[indice]
@@ -274,13 +274,13 @@ int heap_altera_prioridade(heap *h, int indice, int nova_prioridade)
 		return -1;
 
 	//Ciclo para ordenar os elementos. Ao alterar as prioridades, é necessário assegurar que se mantém como min-heap.
-	for(k = h->tamanho ; k > RAIZ ; k--)
+	for(x = h->tamanho ; x > RAIZ ; x--)
 		{
-			if (less_than(h->elementos[k], h->elementos[PAI(k)]))
+			if (less_than(h->elementos[x], h->elementos[PAI(x)]))
 			{
-				aux = h->elementos[PAI(k)];
-				h->elementos[PAI(k)] = h->elementos[k];
-				h->elementos[k] = aux;
+				aux = h->elementos[PAI(x)];
+				h->elementos[PAI(x)] = h->elementos[x];
+				h->elementos[x] = aux;
 			}
 		}
 		return 1;
