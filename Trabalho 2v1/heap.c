@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+//Defines para os diversos elementos de modo a facilitar a construção das funções
 #define RAIZ 			(1)
 #define PAI(x) 			((x)/2)
 #define FILHO_ESQ(x) 	(x*2)
@@ -66,7 +67,6 @@ elemento * create_elem(int prioridade, const char * valor)
 /*
  *FIM FUNÇÕES AUXILIARES
  */
-
 
 /*
 cria uma heap novo com o tamanho máximo inidicado
@@ -179,47 +179,46 @@ Observações: Para manter a consistência da heap, a remoção da raiz implica 
 char* heap_remove(heap * h)
 {
 	int i, biggestSon;
-		elemento *aux;
-		char *root;
+	elemento *aux;
+	char *root;
 
-		//Se a heap não existir ou tamanho for 0, retorna NULL
-		if ((h == NULL)||h->tamanho==0)
-				return NULL;
+	//Se a heap não existir ou tamanho for 0, retorna NULL
+	if ((h == NULL)||h->tamanho==0)
+			return NULL;
 
-		//Guarda em root a string da RAIZ
-		root = h->elementos[RAIZ]->valor;
+	//Guarda em root a string da RAIZ
+	root = h->elementos[RAIZ]->valor;
 
-		//Liberta da memória o elemento da RAIZ
-		free(h->elementos[RAIZ]);
+	//Liberta da memória o elemento da RAIZ
+	free(h->elementos[RAIZ]);
 
-		//Atribui a RAIZ o elemento na posicao tamanho (ultimo elemento)
-		h->elementos[RAIZ] = h->elementos[h->tamanho];
-		//Atribui ao ultimo elemento o valor NULL
-		h->elementos[h->tamanho] = NULL;
+	//Atribui a RAIZ o elemento na posicao tamanho (ultimo elemento)
+	h->elementos[RAIZ] = h->elementos[h->tamanho];
+	//Atribui ao ultimo elemento o valor NULL
+	h->elementos[h->tamanho] = NULL;
 
-		i = RAIZ;
+	i = RAIZ;
 
-		//Após remover a RAIZ e ser-lhe atribuido o elemento em "tamanho", e' necessario ordenar e garantir que continua uma min-heap
-		while(FILHO_ESQ(i) <= h->tamanho)
+	//Após remover a RAIZ e ser-lhe atribuido o elemento em "tamanho", e' necessario ordenar e garantir que continua uma min-heap
+	while(FILHO_ESQ(i) <= h->tamanho)
+	{
+		biggestSon = FILHO_ESQ(i);
+		if (FILHO_DIR(i) < h->tamanho && less_than(h->elementos[FILHO_DIR(i)], h->elementos[FILHO_ESQ(i)]))
+			biggestSon = FILHO_DIR(i);
+		if (less_than(h->elementos[biggestSon], h->elementos[i]))
 		{
-			biggestSon = FILHO_ESQ(i);
-			if (FILHO_DIR(i) < h->tamanho && less_than(h->elementos[FILHO_DIR(i)], h->elementos[FILHO_ESQ(i)]))
-				biggestSon = FILHO_DIR(i);
-			if (less_than(h->elementos[biggestSon], h->elementos[i]))
-			{
-				aux = h->elementos[biggestSon];
-				h->elementos[biggestSon] = h->elementos[i];
-				h->elementos[i] = aux;
-				i = biggestSon;
-			}
-			else
-				break;
+			aux = h->elementos[biggestSon];
+			h->elementos[biggestSon] = h->elementos[i];
+			h->elementos[i] = aux;
+			i = biggestSon;
 		}
+		else
+			break;
+	}
 
-		//Como foi removido um elemento, e necessario reduzir o tamanho da heap em 1
-			h->tamanho--;
-
-			return root;
+	//Como foi removido um elemento, e necessario reduzir o tamanho da heap em 1
+		h->tamanho--;
+		return root;
 }
 
 /*
@@ -286,7 +285,6 @@ int heap_altera_prioridade(heap *h, int indice, int nova_prioridade)
 		return 1;
 }
 
-
 void mostraHeap(heap *h, int indice)
 {
   int i, nivel = 0;
@@ -310,3 +308,4 @@ void mostraHeap(heap *h, int indice)
     mostraHeap(h, indice*2+1);
   }
 }
+
