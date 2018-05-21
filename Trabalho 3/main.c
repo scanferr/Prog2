@@ -12,12 +12,12 @@ vetor *terra;
 int mapa_pos(int x, int y)
 {
     /* devolve tipo de terreno na posicao x,y */
-	int i=0, j;
+	int i = 0, j;
 
-	j=vetor_tamanho(terra);
+	j = vetor_tamanho(terra);
 
 //Percorre todo o vetor e compara os valores das coordenadas X e Y. Se forem iguais devolve o tipo de terreno na respetiva coordenada.
-	while (i<j)
+	while (i < j)
 	{
 		if(terra->elementos[i].x == x && terra->elementos[i].y == y)
 		{
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 	int x1 = 0, x2 = 0;
 	int y1 = 0, y2 = 0;
 	//Variaveis auxiliares para os ciclos
-	int i=0, j;
+	int i = 0, j;
 	//Explorador numero "id"
 	int id;
 	//Variaveis para o tamanho do mapa
@@ -127,9 +127,9 @@ int main(int argc, char *argv[])
 	longi = abs(y1)+abs(y2) + 1;
 
 	//Atualiza as posicoes dos exploradores
-	j=vetor_tamanho(terra);
+	j = vetor_tamanho(terra);
 
-	while(i<j)
+	while(i < j)
 	  {
 	     terra->elementos[i].x = terra->elementos[i].x - x1;
 	     terra->elementos[i].y = terra->elementos[i].y - y1;
