@@ -4,7 +4,7 @@
 #include "vetor.h"
 
 //No algoritmo entregue na aula prática foi explicado que seria usada a estrutura de dados "tabelas de dispersão".
-//Durante a execução do trabalho verificou-se que a estrutura de dados "vectores" era de uma mais fácil execução e, por isso, foi a usada
+//No entanto, devido à facilidade, inicou-se a execução deste trabalho com "listas ligadas". Devido ao elevado tempo de pesquisa a percorrer os elementos todos, optou-se pela estrutura de dados "vetores".
 
 //Definiçao de uma variavel do tipo vetor para uso no programa (mapa_pos e main)
 vetor *terra;
