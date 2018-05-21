@@ -1,25 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "terra_incognita.h"
-#include "vetor.h"
+#include "lista.h"
 
 //No algoritmo entregue na aula prática foi explicado que seria usada a estrutura de dados "tabelas de dispersão".
-//Durante a execução do trabalho verificou-se que a estrutura de dados "vectores" era de uma mais fácil execução e, por isso, foi a usada
+//Durante a execução do trabalho verificou-se que a estrutura de dados "vectores" eram de uma mais fácil execução e, por isso, foi a usada
 
-vetor *terra;
+
+lista *terra;
 
 int mapa_pos(int x, int y)
 {
     /* devolve tipo de terreno na posicao x,y */
-	int j;
+	int j, i;
+	l_elemento *aux1;
 
-	j=vetor_tamanho(terra);
+	j=lista_tamanho(terra);
 
-	for(int i=0; i<j; i++)
+	for(i=0; i<j; i++)
 	{
-	      if(terra->elementos[i].x == x && terra->elementos[i].y == y)
+		aux1 = lista_elemento(terra, i);
+
+	      if(aux1->x == x && aux1->y == y)
 	    {
-	        return terra->elementos[i].id;
+	        return aux1->id;
 	    }
 	}
 
@@ -31,99 +35,106 @@ int main(int argc, char *argv[])
     /* 1) iniciar comunicacao com exploradores
           NOTA: primeiros parametros deverao ser argc e argv */
 
-	int exp, expos[1000][2], type;
-	int x1 = 0, x2 = 0;
-	int y1 = 0, y2 = 0;
-	int id;
-	int i=0, j;
-	char jump;
+	int exp, position[1000][2], type;
+	int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+	int id, i=0;
+	char move;
+	l_elemento *aux;
 
-	terra = vetor_novo();
-	intro(argc, argv, &exp, expos);
-	jump = explorator(&id, &type);
+	terra = lista_nova();
 
-	while(jump != 'X')
+	intro(argc, argv, &exp, position);
+
+	/* 2) comunicar com os exploradores e receber informacoes,
+	              enquanto existem movimentacoes a realizar */
+
+	move = explorator(&id, &type);
+
+	while(move != 'X')
 	{
-				if(jump == 'E')
+	      if(move == 'N')
 	      {
-	         expos[id][0]++;
-	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
+	         position[id][1]--;
+	         lista_insere(terra, position[id][0], position[id][1], type, NULL);
 
-	         if(expos[id][0] < x1)
-	         {
-	           x1 = expos[id][0];
-	         }
-	         if(expos[id][0] > x2)
-	         {
-	           x2 = expos[id][0];
-	         }
-	       }
-
-	      if(jump == 'O')
-	      {
-	         expos[id][0]--;
-	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
-
-	         if(expos[id][0] < x1)
-	         {
-	           x1 = expos[id][0];
-	         }
-	         if(expos[id][0] > x2)
-	         {
-	           x2 = expos[id][0];
-	         }
-	       }
-
-	      if(jump == 'N')
-	      {
-	         expos[id][1]--;
-	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
-
-	          if(expos[id][1] < y1)
+	          if(position[id][1] < y1)
 	          {
-	            y1 = expos[id][1];
+	            y1 = position[id][1];
 	          }
-	          if(expos[id][1] > y2)
+	          if(position[id][1] > y2)
 	          {
-	            y2 = expos[id][1];
+	            y2 = position[id][1];
 	          }
 	        }
 
-	      if(jump == 'S')
+	      if(move == 'S')
 	      {
-	         expos[id][1]++;
-	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
+	         position[id][1]++;
+	         lista_insere(terra, position[id][0], position[id][1], type, NULL);
 
-	         if(expos[id][1] < y1)
+	         if(position[id][1] < y1)
 	         {
-	           y1 = expos[id][1];
+	           y1 = position[id][1];
 	         }
-	         if(expos[id][1] > y2)
+	         if(position[id][1] > y2)
 	         {
-	           y2 = expos[id][1];
+	           y2 = position[id][1];
 	         }
 	       }
-	      jump = explorator(&id, &type);
+
+	      if(move == 'E')
+	      {
+	         position[id][0]++;
+	         lista_insere(terra, position[id][0], position[id][1], type, NULL);
+
+	         if(position[id][0] < x1)
+	         {
+	           x1 = position[id][0];
+	         }
+	         if(position[id][0] > x2)
+	         {
+	           x2 = position[id][0];
+	         }
+	       }
+
+	      if(move == 'O')
+	      {
+	         position[id][0]--;
+	         lista_insere(terra, position[id][0], position[id][1], type, NULL);
+
+	         if(position[id][0] < x1)
+	         {
+	           x1 = position[id][0];
+	         }
+	         if(position[id][0] > x2)
+	         {
+	           x2 = position[id][0];
+	         }
+	       }
+
+	      move = explorator(&id, &type);
 	}
 
 	x2 = abs(x1)+abs(x2) + 1;
 	y2 = abs(y1)+abs(y2) + 1;
 
-	j=vetor_tamanho(terra);
-
-	for(i= 0; i< j; i++)
+	for(i= 0; i< terra->tamanho; i++)
 	  {
-	     terra->elementos[i].x = terra->elementos[i].x - x1;
-	     terra->elementos[i].y = terra->elementos[i].y - y1;
+		 aux = lista_elemento(terra, i);
+	     aux->x = aux->x - x1;
+	     aux->y = aux->y - y1;
 	  }
 
 	/* 3) imprime e verifica o mapa
 	     *NOTA: funcao mapa_pos e' o primeiro das funcoes */
 	tabula(mapa_pos, x2, y2);
 	veritas(mapa_pos, x2, y2);
+
 	/* 4) termina comunicacoes com os exploradores */
 	relinquo();
+
 	//LIBERTA A MEMORIA DO VETOR CRIADO
-	vetor_apaga(terra);
+	lista_apaga(terra);
+
 	return 0;
 }
