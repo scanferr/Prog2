@@ -15,6 +15,7 @@ int mapa_pos(int x, int y)
 
 	j=vetor_tamanho(terra);
 
+//Percorre todo o vetor e comparada os valores das coordenadas X e Y. Se forem iguais devolve o tipo de terreno na respetiva coordenada.
 	while (i<j)
 	{
 		if(terra->elementos[i].x == x && terra->elementos[i].y == y)
@@ -28,22 +29,28 @@ int mapa_pos(int x, int y)
 
 int main(int argc, char *argv[])
 {
-    /* 1) iniciar comunicacao com exploradores
-          NOTA: primeiros parametros deverao ser argc e argv */
-
+  //Declaraçao de variaveis
 	int exp, expos[1000][2], type;
 	int x1 = 0, x2 = 0;
 	int y1 = 0, y2 = 0;
-	int id, i=0;
-	int j;
+	int id, i=0, j;
+	int lat, longi;
 	char jump;
 
+	//Criação de novo vetor
 	terra = vetor_novo();
+
+	 /* 1) iniciar comunicacao com exploradores
+          NOTA: primeiros parametros deverao ser argc e argv */
 	intro(argc, argv, &exp, expos);
+
+	//Retorno da direção do explorador
 	jump = explorator(&id, &type);
 
+	//Enquanto nao atingir o criterio de paragem (X), ira percorrer todos os movimentos dos exploradores
 	while(jump != 'X')
 	{
+		//Se o explorador retorna Este, actualiza valores no vetor e as respetivas posições
 				if(jump == 'E')
 	      {
 	         expos[id][0]++;
@@ -58,7 +65,7 @@ int main(int argc, char *argv[])
 	           x2 = expos[id][0];
 	         }
 	       }
-
+		//Se o explorador retorna Oeste, actualiza valores no vetor e as respetivas posições
 	      if(jump == 'O')
 	      {
 	         expos[id][0]--;
@@ -73,7 +80,7 @@ int main(int argc, char *argv[])
 	           x2 = expos[id][0];
 	         }
 	       }
-
+		//Se o explorador retorna Norte, actualiza valores no vetor e as respetivas posições
 	      if(jump == 'N')
 	      {
 	         expos[id][1]--;
@@ -88,7 +95,7 @@ int main(int argc, char *argv[])
 	            y2 = expos[id][1];
 	          }
 	        }
-
+	//Se o explorador retorna Sul, actualiza valores no vetor e as respetivas posições
 	      if(jump == 'S')
 	      {
 	         expos[id][1]++;
@@ -106,9 +113,11 @@ int main(int argc, char *argv[])
 	      jump = explorator(&id, &type);
 	}
 
-	x2 = abs(x1)+abs(x2) + 1;
-	y2 = abs(y1)+abs(y2) + 1;
+	//E necessário guardar numa variável as dimensões do mapa em X e em Y. Somar valores absolutos das coordenadas + 1
+	lat = abs(x1)+abs(x2) + 1;
+	longi = abs(y1)+abs(y2) + 1;
 
+//Atualiza as posicoes dos exploradores
 	j=vetor_tamanho(terra);
 
 	while(i<j)
@@ -120,14 +129,14 @@ int main(int argc, char *argv[])
 
 	/* 3) imprime e verifica o mapa
 	     *NOTA: funcao mapa_pos e' o primeiro das funcoes */
-	tabula(mapa_pos, x2, y2);
-	veritas(mapa_pos, x2, y2);
+	tabula(mapa_pos, lat, longi);
+	veritas(mapa_pos, lat, longi);
 
 	/* 4) termina comunicacoes com os exploradores */
 	relinquo();
 
-	//LIBERTA A MEMORIA DO VETOR CRIADO
+	//Liberta a memória do vetor criado
 	vetor_apaga(terra);
-
+	
 	return 0;
 }
