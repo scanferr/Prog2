@@ -6,6 +6,7 @@
 //No algoritmo entregue na aula prática foi explicado que seria usada a estrutura de dados "tabelas de dispersão".
 //Durante a execução do trabalho verificou-se que a estrutura de dados "vectores" era de uma mais fácil execução e, por isso, foi a usada
 
+//Definiçao de uma variavel do tipo vetor para uso no programa (mapa_pos e main)
 vetor *terra;
 
 int mapa_pos(int x, int y)
@@ -15,7 +16,7 @@ int mapa_pos(int x, int y)
 
 	j=vetor_tamanho(terra);
 
-//Percorre todo o vetor e comparada os valores das coordenadas X e Y. Se forem iguais devolve o tipo de terreno na respetiva coordenada.
+//Percorre todo o vetor e compara os valores das coordenadas X e Y. Se forem iguais devolve o tipo de terreno na respetiva coordenada.
 	while (i<j)
 	{
 		if(terra->elementos[i].x == x && terra->elementos[i].y == y)
@@ -29,12 +30,20 @@ int mapa_pos(int x, int y)
 
 int main(int argc, char *argv[])
 {
-  //Declaraçao de variaveis
+  //DECLARAÇÃO DE VARIAVEIS
+
+	//Guardar o explorador, criaçao de vetor bidimensional com tamanho 1000 (MAX_EXPLORADORES) e guardar tipo de terreno
 	int exp, expos[1000][2], type;
+	//Variaveis para guardar as coordenadas (1 = min; 2 = max)
 	int x1 = 0, x2 = 0;
 	int y1 = 0, y2 = 0;
-	int id, i=0, j;
+	//Variaveis auxiliares para os ciclos
+	int i=0, j;
+	//Explorador numero "id"
+	int id;
+	//Variaveis para o tamanho do mapa
 	int lat, longi;
+	//Variavel para guardar o char da direção
 	char jump;
 
 	//Criação de novo vetor
@@ -117,7 +126,7 @@ int main(int argc, char *argv[])
 	lat = abs(x1)+abs(x2) + 1;
 	longi = abs(y1)+abs(y2) + 1;
 
-//Atualiza as posicoes dos exploradores
+	//Atualiza as posicoes dos exploradores
 	j=vetor_tamanho(terra);
 
 	while(i<j)
