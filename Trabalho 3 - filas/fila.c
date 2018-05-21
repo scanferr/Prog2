@@ -28,7 +28,6 @@ void fila_apaga(fila *f)
 		cur = f->cabeca;
 		while (cur->proximo != NULL)
 		{
-			free(cur->string);
 			next = cur->proximo;
 			free(cur);
 			cur = next;
@@ -63,32 +62,18 @@ int	fila_tamanho(fila *f)
 	return count;
 }
 
-const char* fila_front(fila *f)
-{
-	if (f == NULL || fila_vazia(f))
-		return NULL;
-	return f->cabeca->string;
-}
-
-int	fila_push(fila *f, const char *string)
+int	fila_push(fila *f, int x, int y, int id)
 {
 	filaItem *novo, *ult = f->cauda;
-
-	if(f == NULL || string == NULL)
-		return -1;
 
 	novo = (filaItem *) malloc(sizeof(filaItem));
 	if(novo == NULL)
 		return -1;
 
-	novo->string = (char*) calloc(strlen(string)+1, sizeof(char));
-	if(novo->string == NULL)
-	{
-		free(novo);
-		return -1;
-	}
+	novo->x = x;
+	novo->y = y;
+	novo->id = id;
 
-	strcpy(novo->string, string);
 	novo->proximo = NULL;
 
 	if (ult == NULL)
@@ -115,6 +100,5 @@ void fila_pop(fila *f)
 	if (f->cabeca == NULL)
 		f->cauda = NULL;
 
-	free(cabeca->string);
 	free(cabeca);
 }

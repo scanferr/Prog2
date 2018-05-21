@@ -10,7 +10,9 @@
 */
 struct fitem
 {
-	char *string;
+	int x;
+	int y;
+	int id;
 	struct fitem *proximo;
 };
 
@@ -70,7 +72,7 @@ const char* fila_front(fila *f);
  *  \return se inserir com sucesso, retorna 1
  *  \return noutras situacoes, retorna -1
  */
-int fila_push(fila *f, const char* string);
+int fila_push(fila *f, int x, int y, int id);
 
 /**
  *  \brief retira e retorna a string 'a cabeca da fila
