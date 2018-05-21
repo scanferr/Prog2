@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
   //DECLARAÇÃO DE VARIAVEIS
 
 	//Guardar o explorador, criaçao de vetor bidimensional com tamanho 1000 (MAX_EXPLORADORES) e guardar tipo de terreno
-	int exp, expos[1000][2], type;
+	int type, exp;
+	int expos[1000][2];
 	//Variaveis para guardar as coordenadas (1 = min; 2 = max)
 	int x1 = 0, x2 = 0;
 	int y1 = 0, y2 = 0;
