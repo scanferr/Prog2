@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
 	int exp, expos[1000][2], type;
 	int x1 = 0, x2 = 0;
 	int y1 = 0, y2 = 0;
-	int id, i=0;
-	int j;
+	int id;
+	int i=0, j;
 	char jump;
 
 	terra = vetor_novo();
@@ -44,37 +44,7 @@ int main(int argc, char *argv[])
 
 	while(jump != 'X')
 	{
-	      if(jump == 'N')
-	      {
-	         expos[id][1]--;
-	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
-
-	          if(expos[id][1] < y1)
-	          {
-	            y1 = expos[id][1];
-	          }
-	          if(expos[id][1] > y2)
-	          {
-	            y2 = expos[id][1];
-	          }
-	        }
-
-	      if(jump == 'S')
-	      {
-	         expos[id][1]++;
-	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
-
-	         if(expos[id][1] < y1)
-	         {
-	           y1 = expos[id][1];
-	         }
-	         if(expos[id][1] > y2)
-	         {
-	           y2 = expos[id][1];
-	         }
-	       }
-
-	      if(jump == 'E')
+				if(jump == 'E')
 	      {
 	         expos[id][0]++;
 	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
@@ -104,6 +74,35 @@ int main(int argc, char *argv[])
 	         }
 	       }
 
+	      if(jump == 'N')
+	      {
+	         expos[id][1]--;
+	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
+
+	          if(expos[id][1] < y1)
+	          {
+	            y1 = expos[id][1];
+	          }
+	          if(expos[id][1] > y2)
+	          {
+	            y2 = expos[id][1];
+	          }
+	        }
+
+	      if(jump == 'S')
+	      {
+	         expos[id][1]++;
+	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
+
+	         if(expos[id][1] < y1)
+	         {
+	           y1 = expos[id][1];
+	         }
+	         if(expos[id][1] > y2)
+	         {
+	           y2 = expos[id][1];
+	         }
+	       }
 	      jump = explorator(&id, &type);
 	}
 
@@ -122,12 +121,9 @@ int main(int argc, char *argv[])
 	     *NOTA: funcao mapa_pos e' o primeiro das funcoes */
 	tabula(mapa_pos, x2, y2);
 	veritas(mapa_pos, x2, y2);
-
 	/* 4) termina comunicacoes com os exploradores */
 	relinquo();
-
 	//LIBERTA A MEMORIA DO VETOR CRIADO
 	vetor_apaga(terra);
-
 	return 0;
 }
