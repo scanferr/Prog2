@@ -5,7 +5,6 @@
 //BIBLIOTECA VETOR USADA NAS AULAS, LIGEIRAMENTE MODIFICADA PARA ACOMODAR O TRABALHO 3
 //STRUCT ALTERADA PARA CONTER OS VALORES PRETENDIDOS
 //REMOCAO DE FUNCOES DESNECESSARIAS PARA ESTE TRABALHO
-//ALTERACAO DA FUNCAO VETOR_ELEMENTO
 //ALTERACAO DA FUNCAO VETOR_INSERE DE ACORDO COM O PRETENDIDO
 
 #ifndef VETOR_H
@@ -18,7 +17,7 @@ typedef struct
 {
   int x;
   int y;
-  int type;
+  int id;
 
 } v_elemento;
 
@@ -58,15 +57,6 @@ void vetor_apaga(vetor *vec);
 *  retorno: -1 se ocorrer algum erro ou numero de elementos do vetor
 */
 int vetor_tamanho(vetor *vec);
-
-/**
-*  retorna o elemento armazenado na posicao especificada
-*  parametro: vec apontador para vetor
-*  parametro: pos indice do elemento
-*  retorno: apontador para a struct na posicao correspondente
-*  nota: se ocorrer algum erro retorna NULL (p.ex. se valor pos indicar uma posicao invalida)
-*/
-v_elemento* vetor_elemento(vetor *vec, int pos);
 
 /**
 *  insere um elemento na posicao especificada

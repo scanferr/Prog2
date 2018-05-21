@@ -3,17 +3,23 @@
 #include "terra_incognita.h"
 #include "vetor.h"
 
-vetor *terrain;
+//No algoritmo entregue na aula prática foi explicado que seria usada a estrutura de dados "tabelas de dispersão".
+//Durante a execução do trabalho verificou-se que a estrutura de dados "vectores" era de uma mais fácil execução e, por isso, foi a usada
+
+vetor *terra;
 
 int mapa_pos(int x, int y)
 {
     /* devolve tipo de terreno na posicao x,y */
+	int j;
 
-	for(int i=0; i<terrain->tamanho; i++)
+	j=vetor_tamanho(terra);
+
+	for(int i=0; i<j; i++)
 	{
-	      if(terrain->elementos[i].x == x && terrain->elementos[i].y == y)
+	      if(terra->elementos[i].x == x && terra->elementos[i].y == y)
 	    {
-	        return terrain->elementos[i].type;
+	        return terra->elementos[i].id;
 	    }
 	}
 
@@ -25,115 +31,103 @@ int main(int argc, char *argv[])
     /* 1) iniciar comunicacao com exploradores
           NOTA: primeiros parametros deverao ser argc e argv */
 
-	int nExplorator, position[MAX_EXPLORADORES][2], typus, id, x1 = 0, y1 = 0, x2 = 0, y2 = 0, i=0;
-	char move;
+	int exp, expos[1000][2], type;
+	int x1 = 0, x2 = 0;
+	int y1 = 0, y2 = 0;
+	int id, i=0;
+	int j;
+	char jump;
 
-	vetor *terrain;
+	terra = vetor_novo();
+	intro(argc, argv, &exp, expos);
+	jump = explorator(&id, &type);
 
-	terrain = vetor_novo();
+	while(jump != 'X')
+	{
+	      if(jump == 'N')
+	      {
+	         expos[id][1]--;
+	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
 
-	intro(argc, argv, &nExplorator, position);
-
-//TESTE DE INTRO
-
-	// printf("%d\n", nExplorator);
-
-	// for(i=0; i< nExplorator; i++) {
-	           // printf("%d %d\n", position[i][0], position[i][1]);
-	      //}
-
-	      //printf("%c\n", explorator(&id, &type));
-	      //printf("%d\n", type);
-//FIM TESTE INTRO
-
-
-	 /* 2) comunicar com os exploradores e receber informacoes,
-	              enquanto existem movimentacoes a realizar */
-
-	 move = explorator(&id, &typus);
-	    while(move != 'X'){
-	      if(move == 'N'){
-	         position[id][1]--;
-	         vetor_insere(terrain, position[id][0], position[id][1], typus, -1);
-
-	          if(position[id][1] < y1){
-	            y1 = position[id][1];
+	          if(expos[id][1] < y1)
+	          {
+	            y1 = expos[id][1];
 	          }
-	          if(position[id][1] > y2){
-	            y2 = position[id][1];
+	          if(expos[id][1] > y2)
+	          {
+	            y2 = expos[id][1];
 	          }
 	        }
-	      if(move == 'S'){
-	         position[id][1]++;
-	         vetor_insere(terrain, position[id][0], position[id][1], typus, -1);
 
-	         if(position[id][1] < y1){
-	           y1 = position[id][1];
-	         }
-	         if(position[id][1] > y2){
-	           y2 = position[id][1];
-	         }
-	       }
-	      if(move == 'E'){
-	         position[id][0]++;
-	         vetor_insere(terrain, position[id][0], position[id][1], typus, -1);
+	      if(jump == 'S')
+	      {
+	         expos[id][1]++;
+	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
 
-	         if(position[id][0] < x1){
-	           x1 = position[id][0];
+	         if(expos[id][1] < y1)
+	         {
+	           y1 = expos[id][1];
 	         }
-	         if(position[id][0] > x2){
-	           x2 = position[id][0];
+	         if(expos[id][1] > y2)
+	         {
+	           y2 = expos[id][1];
 	         }
 	       }
-	      if(move == 'O'){
-	         position[id][0]--;
-	         vetor_insere(terrain, position[id][0], position[id][1], typus, -1);
 
-	         if(position[id][0] < x1){
-	           x1 = position[id][0];
+	      if(jump == 'E')
+	      {
+	         expos[id][0]++;
+	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
+
+	         if(expos[id][0] < x1)
+	         {
+	           x1 = expos[id][0];
 	         }
-	         if(position[id][0] > x2){
-	           x2 = position[id][0];
+	         if(expos[id][0] > x2)
+	         {
+	           x2 = expos[id][0];
 	         }
 	       }
-	      move = explorator(&id, &typus);
-	    }
-	    printf("%d %d\n %d %d\n", x1, y1, x2, y2);
 
-	    x2 = abs(x1)+abs(x2) + 1;
-	    y2 = abs(y1)+abs(y2) + 1;
+	      if(jump == 'O')
+	      {
+	         expos[id][0]--;
+	         vetor_insere(terra, expos[id][0], expos[id][1], type, -1);
 
-	    printf("%d %d\n", x2, y2);
+	         if(expos[id][0] < x1)
+	         {
+	           x1 = expos[id][0];
+	         }
+	         if(expos[id][0] > x2)
+	         {
+	           x2 = expos[id][0];
+	         }
+	       }
 
+	      jump = explorator(&id, &type);
+	}
 
-	    for(i= 0; i< terrain->tamanho; i++)
-	    {
-	      terrain->elementos[i].x = terrain->elementos[i].x - x1;
-	      terrain->elementos[i].y = terrain->elementos[i].y - y1;
-	    }
+	x2 = abs(x1)+abs(x2) + 1;
+	y2 = abs(y1)+abs(y2) + 1;
 
-	    //TESTE DOS TIPOS DE TERRENO ENCONTRADOS E DA POSICAO
-	    /*
-	     for(i= 0; i< terrain->tamanho; i++)
-	     {
-	         printf("type-> %d\n", terrain->elementos[i].type);
-	         printf("(x, y)--> (%d, %d) \n", terrain->elementos[i].x, terrain->elementos[i].y);
-	         printf("\n");
-	     }
-	     */
+	j=vetor_tamanho(terra);
 
+	for(i= 0; i< j; i++)
+	  {
+	     terra->elementos[i].x = terra->elementos[i].x - x1;
+	     terra->elementos[i].y = terra->elementos[i].y - y1;
+	  }
 
-	    /* 3) imprime e verifica o mapa
-	     *
-	          NOTA: funcao mapa_pos e' o primeiro das funcoes */
+	/* 3) imprime e verifica o mapa
+	     *NOTA: funcao mapa_pos e' o primeiro das funcoes */
+	tabula(mapa_pos, x2, y2);
+	veritas(mapa_pos, x2, y2);
 
-	    tabula(mapa_pos, x2, y2);
-	    veritas(mapa_pos, x2, y2);
-	    relinquo();
+	/* 4) termina comunicacoes com os exploradores */
+	relinquo();
 
+	//LIBERTA A MEMORIA DO VETOR CRIADO
+	vetor_apaga(terra);
 
-	    /* 4) termina comunicacoes com os exploradores */
-
-
-	    return 0;
+	return 0;
 }

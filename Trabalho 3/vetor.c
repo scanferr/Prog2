@@ -5,7 +5,6 @@
 //BIBLIOTECA VETOR USADA NAS AULAS, LIGEIRAMENTE MODIFICADA PARA ACOMODAR O TRABALHO 3
 //STRUCT ALTERADA PARA CONTER OS VALORES PRETENDIDOS
 //REMOCAO DE FUNCOES DESNECESSARIAS PARA ESTE TRABALHO
-//ALTERACAO DA FUNCAO VETOR_ELEMENTO
 //ALTERACAO DA FUNCAO VETOR_INSERE DE ACORDO COM O PRETENDIDO
 
 #include "vetor.h"
@@ -31,18 +30,8 @@ vetor* vetor_novo()
 
 void vetor_apaga(vetor* vec)
 {
-	int i;
-
 	if(vec == NULL)
-	return;
-
-	/* liberta memoria de cada string */
-	for (i = 0; i < vec->tamanho; i++)
-	{
-		free(vec->elementos[i].x);
-		free(vec->elementos[i].y);
-		free(vec->elementos[i].type);
-	}
+		return;
 
 	/* liberta memoria dos apontares para as strings */
 	free(vec->elementos);
@@ -59,26 +48,13 @@ int vetor_tamanho(vetor* vec)
 	return vec->tamanho;
 }
 
-v_elemento* vetor_elemento(vetor* vec, int indice)
-{	
-	v_elemento *aux;
-
-	*aux  = vec->elementos[indice];
-
-	if (vec == NULL || indice < 0 || indice >= vec->tamanho)
-	return NULL;
-
-	return aux;
-}
-
-int vetor_insere(vetor *vec, int x, int y, int type, int pos)
+int vetor_insere(vetor *vec, int x, int y, int id, int pos)
 {
 	int i;
 
 	if(vec == NULL || pos < -1 || pos > vec->tamanho)
 		return -1;
 
-	
 	// controlo de repeticoes
 	for (i = 0; i < vec->tamanho; i++)
 	{
@@ -112,7 +88,7 @@ int vetor_insere(vetor *vec, int x, int y, int type, int pos)
 	/* copia valor */
 	vec->elementos[pos].x = x;
 	vec->elementos[pos].y = y;
-	vec->elementos[pos].type = type;
+	vec->elementos[pos].id = id;
 
 	vec->tamanho++;
 
